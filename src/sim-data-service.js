@@ -4,12 +4,28 @@ const boolParser = (val) => {
   return !(val === 0);
 }
 
+const secondsToTimestamp = (val) => {
+  const hr = Math.floor(val / 3600).toString().padStart(2, '0');
+  const mm = Math.floor((val % 3600) / 60).toString().padStart(2, '0');
+  const ss = Math.floor(val % 60).toString().padStart(2, '0');
+  return `${hr}h ${mm}m ${ss}s`;
+};
+
+const percentFloatParser = (val) => {
+  return Math.round(val * 100);
+}
+
+
 const UNIT_SYMBOL = {
   'percent': '%',
   'degrees': '*',
   'feet': 'ft',
+  'meter': 'm',
   'knots': 'kts',
-  'gforce': 'g'
+  'gforce': 'g',
+  'gallon': 'gal',
+  'pound': 'lbs',
+  'kilogram': 'kg',
 }
 
 // ref
@@ -22,10 +38,13 @@ const SIM_VARS = {
     name: 'aircraft',
     eventId: 100,
     vars: [
+      { alias: 'sim_time', key: 'SIMULATION TIME', unit: 'seconds', dataType: SimConnectDataType.INT64, tag: SimConnectConstants.UNUSED, valueParser: secondsToTimestamp },
       { alias: 'category', key: 'CATEGORY', unit: null, dataType: SimConnectDataType.STRING32, tag: SimConnectConstants.UNUSED },
       { alias: 'title', key: 'TITLE', unit: null, dataType: SimConnectDataType.STRING128, tag: SimConnectConstants.UNUSED },
       { alias: 'model', key: 'ATC MODEL', unit: null, dataType: SimConnectDataType.STRING32, tag: SimConnectConstants.UNUSED },
       { alias: 'type', key: 'ATC TYPE', unit: null, dataType: SimConnectDataType.STRING32, tag: SimConnectConstants.UNUSED },
+      { alias: 'rwy_min_t', key: 'ATC SUGGESTED MIN RWY TAKEOFF', unit: 'meter', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'rwy_min_l', key: 'ATC SUGGESTED MIN RWY LANDING', unit: 'meter', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
       { alias: 'flight', key: 'ATC FLIGHT NUMBER', unit: null, dataType: SimConnectDataType.STRING8, tag: SimConnectConstants.UNUSED },
       { alias: 'reg', key: 'ATC ID', unit: null, dataType: SimConnectDataType.STRING32, tag: SimConnectConstants.UNUSED },
       { alias: 'callsign', key: 'ATC AIRLINE', unit: null, dataType: SimConnectDataType.STRING32, tag: SimConnectConstants.UNUSED },
@@ -72,6 +91,7 @@ const SIM_VARS = {
       { alias: 'eng_2_n2', key: 'ENG N2 RPM:2', unit: 'percent', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
       { alias: 'eng_3_n2', key: 'ENG N2 RPM:3', unit: 'percent', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
       { alias: 'eng_4_n2', key: 'ENG N2 RPM:4', unit: 'percent', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'fuel', key: 'FUEL TOTAL QUANTITY WEIGHT', unit: 'kilogram', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
     ]
   },
 
@@ -89,6 +109,8 @@ const SIM_VARS = {
       { alias: 'spoiler', key: 'SPOILERS HANDLE POSITION', unit: 'percent', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
       { alias: 'flap', key: 'FLAPS HANDLE PERCENT', unit: 'percent', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
       { alias: 'lights', key: 'LIGHT ON STATES', unit: 'mask', dataType: SimConnectDataType.INT64, tag: SimConnectConstants.UNUSED },
+      { alias: 'gear_lev', key: 'GEAR HANDLE POSITION', unit: null, dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED, valueParser: boolParser },
+      { alias: 'gear_ext', key: 'GEAR TOTAL PCT EXTENDED', unit: 'percent', dataType: SimConnectDataType.FLOAT32, tag: SimConnectConstants.UNUSED, valueParser: percentFloatParser },
     ]
   },
 
