@@ -41,7 +41,7 @@
 
       socket.onmessage = (message) => {
         const data = JSON.parse(message.data);
-        const eventName =  data.eventName;
+        const eventName = data.eventName;
         delete data.timestamp;
         delete data.eventName;
         document.getElementById(eventName).innerHTML = '';
