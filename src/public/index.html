@@ -5,6 +5,36 @@
   <title>MSFS SimVars</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+  <style>
+    html,
+    body {
+      background-color: rgb(33, 36, 43);
+      color: rgb(240, 240, 240);
+      font-size: 0.9em;
+    }
+
+table{
+  margin: 1em;
+}
+
+    table,
+    tr,
+    td {
+      border-color: rgb(43, 43, 43) !important;
+    }
+
+    tr:first-child {
+      font-weight: bold;
+    }
+
+    td:nth-child(2n+1) {
+      color: rgb(5, 120, 5);
+    }
+
+    td:nth-child(2n) {
+      color: rgb(5, 160, 5);
+    }
+  </style>
 </head>
 
 <body>
@@ -14,40 +44,39 @@
         <tbody id="aircraft"></tbody>
       </table>
       <table class="pure-table pure-table-horizontal">
-        <tbody id="avionic"></tbody>
+        <tbody id="autopilot"></tbody>
       </table>
       <table class="pure-table pure-table-horizontal">
-        <tbody id="autopilot"></tbody>
+        <tbody id="engine"></tbody>
       </table>
     </div>
     <div class="pure-u-1-2">
       <table class="pure-table pure-table-horizontal">
-        <tbody id="control"></tbody>
+        <tbody id="avionic"></tbody>
       </table>
       <table class="pure-table pure-table-horizontal">
-        <tbody id="engine"></tbody>
+        <tbody id="control"></tbody>
       </table>
     </div>
   </div>
 
 
   <script>
-    const socket = new WebSocket('ws://localhost:3000');
+    const socket = new WebSocket(`ws://${window.location.host}`);
 
     socket.addEventListener('open', (event) => {
       console.log('connected');
 
-      socket.send('initial', 'hi');
-
       socket.onmessage = (message) => {
         const data = JSON.parse(message.data);
-        const eventName = data.eventName;
         delete data.timestamp;
-        delete data.eventName;
-        document.getElementById(eventName).innerHTML = '';
+
+        document.getElementById(data.setName.value).innerHTML = '';
+
         Object.keys(data).forEach(key => {
-          document.getElementById(eventName).innerHTML += `<tr><td>${key}</td><td>${data[key]}</td></tr>`;
+          document.getElementById(data.setName.value).innerHTML += `<tr><td>${key}</td><td>${data[key].value}  ${data[key].unit ?? ''}</td></tr>`;
         });
+
       };
 
     });
