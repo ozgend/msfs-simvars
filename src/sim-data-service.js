@@ -88,6 +88,7 @@ const SIM_VARS = {
       { alias: 'spoiler_arm', key: 'SPOILERS ARMED', unit: null, dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED, valueParser: boolParser },
       { alias: 'spoiler', key: 'SPOILERS HANDLE POSITION', unit: 'percent', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
       { alias: 'flap', key: 'FLAPS HANDLE PERCENT', unit: 'percent', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'lights', key: 'LIGHT ON STATES', unit: 'mask', dataType: SimConnectDataType.INT64, tag: SimConnectConstants.UNUSED },
     ]
   },
 

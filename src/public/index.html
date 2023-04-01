@@ -13,9 +13,9 @@
       font-size: 0.9em;
     }
 
-table{
-  margin: 1em;
-}
+    table {
+      margin: 1em;
+    }
 
     table,
     tr,
@@ -64,6 +64,28 @@ table{
   <script>
     const socket = new WebSocket(`ws://${window.location.host}`);
 
+    // https://docs.flightsimulator.com/html/Programming_Tools/SimVars/Aircraft_SimVars/Aircraft_System_Variables.htm#LIGHT_ON_STATES
+    const lightMask = {
+      'Nav': 0x0001,
+      'Beacon': 0x0002,
+      'Landing': 0x0004,
+      'Taxi': 0x0008,
+      'Strobe': 0x0010,
+      'Panel': 0x0020,
+      'Recog': 0x0040,
+      'Wing': 0x0080,
+      'Logo': 0x0100,
+      'Cabin': 0x0200,
+    }
+
+    const decodeLights = (value) => {
+      let lightStates = [];
+      Object.keys(lightMask).forEach(key => {
+        lightStates.push({ key, on: (value & parseInt(lightMask[key])) > 0 });
+      });
+      return lightStates;
+    };
+
     socket.addEventListener('open', (event) => {
       console.log('connected');
 
@@ -74,7 +96,11 @@ table{
         document.getElementById(data.setName.value).innerHTML = '';
 
         Object.keys(data).forEach(key => {
-          document.getElementById(data.setName.value).innerHTML += `<tr><td>${key}</td><td>${data[key].value}  ${data[key].unit ?? ''}</td></tr>`;
+          let value = `${data[key].value}  ${data[key].unit ?? ''}`;
+          if (key === 'lights') {
+            value = decodeLights(data[key].value).filter(l => l.on).map(l => l.key).join(', ');
+          }
+          document.getElementById(data.setName.value).innerHTML += `<tr><td>${key}</td><td>${value}</td></tr>`;
         });
 
       };
