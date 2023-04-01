@@ -4,6 +4,14 @@ const boolParser = (val) => {
   return !(val === 0);
 }
 
+const UNIT_SYMBOL = {
+  'percent': '%',
+  'degrees': '*',
+  'feet': 'ft',
+  'knots': 'kts',
+  'gforce': 'g'
+}
+
 // ref
 // https://docs.flightsimulator.com/html/Programming_Tools/SimVars/Simulation_Variables.htm
 // https://docs.flightsimulator.com/html/Programming_Tools/SimVars/Simulation_Variable_Units.htm
@@ -14,9 +22,13 @@ const SIM_VARS = {
     name: 'aircraft',
     eventId: 100,
     vars: [
-      { alias: 'atcId', key: 'ATC ID', unit: null, dataType: SimConnectDataType.STRING32, tag: SimConnectConstants.UNUSED },
       { alias: 'category', key: 'CATEGORY', unit: null, dataType: SimConnectDataType.STRING32, tag: SimConnectConstants.UNUSED },
       { alias: 'title', key: 'TITLE', unit: null, dataType: SimConnectDataType.STRING128, tag: SimConnectConstants.UNUSED },
+      { alias: 'model', key: 'ATC MODEL', unit: null, dataType: SimConnectDataType.STRING32, tag: SimConnectConstants.UNUSED },
+      { alias: 'type', key: 'ATC TYPE', unit: null, dataType: SimConnectDataType.STRING32, tag: SimConnectConstants.UNUSED },
+      { alias: 'flight', key: 'ATC FLIGHT NUMBER', unit: null, dataType: SimConnectDataType.STRING8, tag: SimConnectConstants.UNUSED },
+      { alias: 'reg', key: 'ATC ID', unit: null, dataType: SimConnectDataType.STRING32, tag: SimConnectConstants.UNUSED },
+      { alias: 'callsign', key: 'ATC AIRLINE', unit: null, dataType: SimConnectDataType.STRING32, tag: SimConnectConstants.UNUSED },
     ]
   },
 
@@ -48,18 +60,18 @@ const SIM_VARS = {
     name: 'engine',
     eventId: 300,
     vars: [
-      { alias: 'eng_1_thr', key: 'GENERAL ENG THROTTLE LEVER POSITION:1', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'eng_2_thr', key: 'GENERAL ENG THROTTLE LEVER POSITION:2', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'eng_3_thr', key: 'GENERAL ENG THROTTLE LEVER POSITION:3', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'eng_4_thr', key: 'GENERAL ENG THROTTLE LEVER POSITION:4', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'eng_1_n1', key: 'ENG N1 RPM:1', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'eng_2_n1', key: 'ENG N1 RPM:2', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'eng_3_n1', key: 'ENG N1 RPM:3', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'eng_4_n1', key: 'ENG N1 RPM:4', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'eng_1_n2', key: 'ENG N2 RPM:1', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'eng_2_n2', key: 'ENG N2 RPM:2', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'eng_3_n2', key: 'ENG N2 RPM:3', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'eng_4_n2', key: 'ENG N2 RPM:4', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'eng_1_thr', key: 'GENERAL ENG THROTTLE LEVER POSITION:1', unit: 'percent', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'eng_2_thr', key: 'GENERAL ENG THROTTLE LEVER POSITION:2', unit: 'percent', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'eng_3_thr', key: 'GENERAL ENG THROTTLE LEVER POSITION:3', unit: 'percent', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'eng_4_thr', key: 'GENERAL ENG THROTTLE LEVER POSITION:4', unit: 'percent', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'eng_1_n1', key: 'ENG N1 RPM:1', unit: 'percent', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'eng_2_n1', key: 'ENG N1 RPM:2', unit: 'percent', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'eng_3_n1', key: 'ENG N1 RPM:3', unit: 'percent', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'eng_4_n1', key: 'ENG N1 RPM:4', unit: 'percent', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'eng_1_n2', key: 'ENG N2 RPM:1', unit: 'percent', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'eng_2_n2', key: 'ENG N2 RPM:2', unit: 'percent', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'eng_3_n2', key: 'ENG N2 RPM:3', unit: 'percent', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'eng_4_n2', key: 'ENG N2 RPM:4', unit: 'percent', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
     ]
   },
 
@@ -69,7 +81,7 @@ const SIM_VARS = {
     vars: [
       { alias: 'brake_skid', key: 'ANTISKID BRAKES ACTIVE', unit: null, dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
       { alias: 'brake_auto', key: 'AUTOBRAKES ACTIVE', unit: null, dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'brake_auto_sw', key: 'AUTO BRAKE SWITCH CB', unit: 'number', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'brake_auto_sw', key: 'AUTO BRAKE SWITCH CB', unit: null, dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
       { alias: 'brake_pos', key: 'BRAKE INDICATOR', unit: 'position', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
       { alias: 'brake_park', key: 'BRAKE PARKING POSITION', unit: null, dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED, valueParser: boolParser },
       { alias: 'brake_park_ind', key: 'BRAKE PARKING INDICATOR', unit: null, dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED, valueParser: boolParser },
@@ -136,8 +148,8 @@ module.exports = class SimDataService {
       const simVars = Object.values(SIM_VARS).find(s => s.eventId === recvSimObject.defineID);
 
       const data = {
-        timestamp: new Date().toISOString().replace('T', ' ').split('Z')[0],
-        eventName: simVars.name
+        timestamp: { value: new Date().toISOString().replace('T', ' ').split('Z')[0] },
+        setName: { value: simVars.name }
       };
 
       simVars.vars.forEach(v => {
@@ -146,7 +158,7 @@ module.exports = class SimDataService {
         const valueReader = `read${enumName[0]}${enumName.slice(1).toLowerCase()}`;
         try {
           const value = recvSimObject.data[valueReader]();
-          data[v.alias] = v.valueParser ? v.valueParser(value) : value;
+          data[v.alias] = { value: v.valueParser ? v.valueParser(value) : value, unit: v.unit ? UNIT_SYMBOL[v.unit] : '' };
         }
         catch (err) { }
       });

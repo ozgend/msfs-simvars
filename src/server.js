@@ -26,9 +26,9 @@ simDataService.connect()
     simDataService.requestAircraftData();
   });
 
-simDataService.eventNames.forEach(eventName => {
-  context.eventBus.addListener(eventName, (data) => {
-    // console.log(`received event ${eventName}`);
+simDataService.eventNames.forEach(setName => {
+  context.eventBus.addListener(setName, (data) => {
+    // console.log(`received event ${setName}`);
     wsServer.clients.forEach(socket => {
       socket.send(JSON.stringify(data));
     });
@@ -39,6 +39,9 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
 
+app.get('/favicon.ico', (req, res) => {
+  res.sendStatus(200);
+});
 
 wsServer.on('connection', socket => {
   console.log('connected');
