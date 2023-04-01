@@ -7,14 +7,9 @@ module.exports = class EventBus {
     this._handlerMap = {};
   }
 
-  listen(name) {
-    this._handlerMap[name] = this._handlerMap[name] ?? [];
-
+  addListener(name, listener) {
     this._eventEmitter.on(name, (eventData) => {
-      this._handlerMap[name].forEach(h => {
-        console.debug(`on [${name}] handler [${h.uid}]`);
-        h.handler(eventData);
-      });
+      listener(eventData);
     });
 
     return this;
@@ -22,20 +17,6 @@ module.exports = class EventBus {
 
   send(name, data) {
     this._eventEmitter.emit(name, data);
-  }
-
-  addHandler(name, uid, handler) {
-    this._handlerMap[name] = this._handlerMap[name] ?? [];
-
-    if (this._handlerMap[name].find(h => h.uid === uid)) {
-      return;
-    }
-
-    this._handlerMap[name].push({ uid, handler });
-  }
-
-  removeHandler(name, uid) {
-    this._handlerMap[name] = this._handlerMap[name].filter(h => h.uid === uid);
   }
 
 }

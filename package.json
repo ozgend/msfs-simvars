@@ -2,9 +2,9 @@
   "name": "msfs-simconnect",
   "version": "1.0.0",
   "description": "",
-  "main": "src/app.mjs",
+  "main": "src/app.js",
   "scripts": {
-    "start": "node src/app.mjs"
+    "start": "node src/app.js"
   },
   "author": "denolk",
   "license": "ISC",
@@ -12,6 +12,7 @@
     "express": "^4.18.2",
     "msfs-simconnect-api-wrapper": "^1.3.1",
     "node-simconnect": "^3.4.3",
-    "winston": "^3.8.2"
+    "winston": "^3.8.2",
+    "ws": "^8.13.0"
   }
 }
