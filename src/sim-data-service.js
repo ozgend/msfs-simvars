@@ -4,10 +4,14 @@ const boolParser = (val) => {
   return !(val === 0);
 }
 
+// ref
 // https://docs.flightsimulator.com/html/Programming_Tools/SimVars/Simulation_Variables.htm
+// https://docs.flightsimulator.com/html/Programming_Tools/SimVars/Simulation_Variable_Units.htm
+
 
 const SIM_VARS = {
   aircraft: {
+    name: 'aircraft',
     eventId: 100,
     vars: [
       { alias: 'atcId', key: 'ATC ID', unit: null, dataType: SimConnectDataType.STRING32, tag: SimConnectConstants.UNUSED },
@@ -16,63 +20,67 @@ const SIM_VARS = {
     ]
   },
 
-  avionics: {
+  avionic: {
+    name: 'avionic',
     eventId: 200,
     vars: [
       { alias: 'lat', key: 'PLANE LATITUDE', unit: 'degrees', dataType: SimConnectDataType.FLOAT64, tag: SimConnectConstants.UNUSED },
       { alias: 'lon', key: 'PLANE LONGITUDE', unit: 'degrees', dataType: SimConnectDataType.FLOAT64, tag: SimConnectConstants.UNUSED },
-      { alias: 'heading_true', key: 'PLANE HEADING DEGREES TRUE', unit: 'degrees', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'heading_mag', key: 'PLANE HEADING DEGREES MAGNETIC', unit: 'degrees', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'alt', key: 'PLANE ALTITUDE', unit: 'feet', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'lat_gps', key: 'GPS POSITION LAT', unit: 'degrees', dataType: SimConnectDataType.FLOAT64, tag: SimConnectConstants.UNUSED },
+      { alias: 'lon_gps', key: 'GPS POSITION LON', unit: 'degrees', dataType: SimConnectDataType.FLOAT64, tag: SimConnectConstants.UNUSED },
+      { alias: 'alt_gps', key: 'GPS POSITION ALT', unit: 'feet', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'hdg_true', key: 'PLANE HEADING DEGREES TRUE', unit: 'degrees', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'hdg_mag', key: 'PLANE HEADING DEGREES MAGNETIC', unit: 'degrees', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
       { alias: 'pitch', key: 'PLANE PITCH DEGREES', unit: 'degrees', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
       { alias: 'bank', key: 'PLANE BANK DEGREES', unit: 'degrees', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'alt_sea', key: 'PLANE ALTITUDE', unit: 'feet', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'alt_ground', key: 'PLANE ALTITUDE ABOVE GROUND', unit: 'feet', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'speed', key: 'GROUND VELOCITY', unit: 'knots', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'speed_ground', key: 'SURFACE RELATIVE GROUND SPEED', unit: 'knots', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'airspeed', key: 'AIRSPEED INDICATED', unit: 'knots', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'airspeed_true', key: 'AIRSPEED TRUE', unit: 'knots', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'speed_gnd', key: 'GROUND VELOCITY', unit: 'knots', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'speed_rel', key: 'SURFACE RELATIVE GROUND SPEED', unit: 'knots', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'speed_air', key: 'AIRSPEED INDICATED', unit: 'knots', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'speed_true', key: 'AIRSPEED TRUE', unit: 'knots', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'vertical', key: 'VERTICAL SPEED', unit: 'feet', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
       { alias: 'gforce', key: 'G FORCE', unit: 'gforce', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      // { alias: 'vertical', key: 'VERTICAL SPEED', unit: 'feet per second', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      // { alias: 'gps_alt', key: 'GPS POSITION ALT', unit: 'meters', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      // { alias: 'gps_lat', key: 'GPS POSITION LAT', unit: 'degrees', dataType: SimConnectDataType.FLOAT64, tag: SimConnectConstants.UNUSED },
-      // { alias: 'gps_lon', key: 'GPS POSITION LON', unit: 'degrees', dataType: SimConnectDataType.FLOAT64, tag: SimConnectConstants.UNUSED },
+      // { alias: 'alt_ground', key: 'PLANE ALTITUDE ABOVE GROUND', unit: 'feet', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
     ]
   },
 
   engine: {
+    name: 'engine',
     eventId: 300,
     vars: [
-      { alias: 'eng_1_throttle', key: 'GENERAL ENG THROTTLE LEVER POSITION:1', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'eng_2_throttle', key: 'GENERAL ENG THROTTLE LEVER POSITION:2', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'eng_3_throttle', key: 'GENERAL ENG THROTTLE LEVER POSITION:3', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'eng_4_throttle', key: 'GENERAL ENG THROTTLE LEVER POSITION:4', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'eng_1_rpm_n1', key: 'ENG N1 RPM:1', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'eng_2_rpm_n1', key: 'ENG N1 RPM:2', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'eng_3_rpm_n1', key: 'ENG N1 RPM:3', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'eng_4_rpm_n1', key: 'ENG N1 RPM:4', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'eng_1_rpm_n2', key: 'ENG N2 RPM:1', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'eng_2_rpm_n2', key: 'ENG N2 RPM:2', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'eng_3_rpm_n2', key: 'ENG N2 RPM:3', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'eng_4_rpm_n2', key: 'ENG N2 RPM:4', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'eng_1_thr', key: 'GENERAL ENG THROTTLE LEVER POSITION:1', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'eng_2_thr', key: 'GENERAL ENG THROTTLE LEVER POSITION:2', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'eng_3_thr', key: 'GENERAL ENG THROTTLE LEVER POSITION:3', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'eng_4_thr', key: 'GENERAL ENG THROTTLE LEVER POSITION:4', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'eng_1_n1', key: 'ENG N1 RPM:1', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'eng_2_n1', key: 'ENG N1 RPM:2', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'eng_3_n1', key: 'ENG N1 RPM:3', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'eng_4_n1', key: 'ENG N1 RPM:4', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'eng_1_n2', key: 'ENG N2 RPM:1', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'eng_2_n2', key: 'ENG N2 RPM:2', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'eng_3_n2', key: 'ENG N2 RPM:3', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'eng_4_n2', key: 'ENG N2 RPM:4', unit: 'percentage', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
     ]
   },
 
-  controls: {
+  control: {
+    name: 'control',
     eventId: 400,
     vars: [
-      { alias: 'brake_anti_skid', key: 'ANTISKID BRAKES ACTIVE', unit: null, dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'breake_auto', key: 'AUTOBRAKES ACTIVE', unit: null, dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'brake_skid', key: 'ANTISKID BRAKES ACTIVE', unit: null, dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
+      { alias: 'brake_auto', key: 'AUTOBRAKES ACTIVE', unit: null, dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
       { alias: 'brake_auto_sw', key: 'AUTO BRAKE SWITCH CB', unit: 'number', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
       { alias: 'brake_pos', key: 'BRAKE INDICATOR', unit: 'position', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
-      { alias: 'brake_park_pos', key: 'BRAKE PARKING POSITION', unit: null, dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED, valueParser: boolParser },
+      { alias: 'brake_park', key: 'BRAKE PARKING POSITION', unit: null, dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED, valueParser: boolParser },
       { alias: 'brake_park_ind', key: 'BRAKE PARKING INDICATOR', unit: null, dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED, valueParser: boolParser },
-      { alias: 'spoiler_armed', key: 'SPOILERS ARMED', unit: null, dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED, valueParser: boolParser },
+      { alias: 'spoiler_arm', key: 'SPOILERS ARMED', unit: null, dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED, valueParser: boolParser },
       { alias: 'spoiler', key: 'SPOILERS HANDLE POSITION', unit: 'percent', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
       { alias: 'flap', key: 'FLAPS HANDLE PERCENT', unit: 'percent', dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED },
     ]
   },
 
   autopilot: {
+    name: 'autopilot',
     eventId: 500,
     vars: [
       { alias: 'ap_dis', key: 'AUTOPILOT DISENGAGED', unit: null, dataType: SimConnectDataType.INT32, tag: SimConnectConstants.UNUSED, valueParser: boolParser },
@@ -81,11 +89,11 @@ const SIM_VARS = {
     ]
   },
 
-
 };
 
 module.exports = class SimDataService {
   constructor(context, { host, port, appName, updateFreqSecs }) {
+    this.eventNames = Object.keys(SIM_VARS).map(v => `on_sim_data_${v}`);
     this._context = context;
     this._host = host ?? '127.0.0.1';
     this._port = port ?? 500;
@@ -123,14 +131,14 @@ module.exports = class SimDataService {
       this._simConnection.requestDataOnSimObject(SIM_VARS[key].eventId, SIM_VARS[key].eventId, SimConnectConstants.OBJECT_ID_USER, SimConnectPeriod.SECOND, 0, this._updateFreqSecs, 0, 0);
     });
 
-    let data = {};
-    let counter = 0;
 
     this._simConnection.on('simObjectData', recvSimObject => {
-
-      counter += recvSimObject.defineID
-
       const simVars = Object.values(SIM_VARS).find(s => s.eventId === recvSimObject.defineID);
+
+      const data = {
+        timestamp: new Date().toISOString().replace('T', ' ').split('Z')[0],
+        eventName: simVars.name
+      };
 
       simVars.vars.forEach(v => {
         const enumIndex = Object.values(SimConnectDataType).indexOf(v.dataType);
@@ -143,11 +151,7 @@ module.exports = class SimDataService {
         catch (err) { }
       });
 
-      if (counter === Object.values(SIM_VARS).map(v => v.eventId).reduce((i, s) => { return i + s; })) {
-        counter = 0;
-        data.timestamp = new Date().toISOString().replace('T', ' ').split('Z')[0];
-        this._context.eventBus.send('ON_SIM_AIRCRAFT_DATA', data);
-      }
+      this._context.eventBus.send(`on_sim_data_${simVars.name.toLocaleLowerCase()}`, data);
 
     });
   }
